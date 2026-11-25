@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>新手養貓入門：5 大核心照護指南｜喜拿喵式會社 LLM Wiki</title>
+
+  <!-- 載入 Noto Sans TC 字體 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- 載入 Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FDFBF7',
+            sand: '#F5EFE6',
+            ink: '#3A322C',
+            muted: '#6E6259',
+            caramel: '#D97742',
+            caramelLight: '#FDF0E8',
+            sage: '#5B8C6E',
+            sageLight: '#ECF4EF',
+            alert: '#C84B31',
+            alertLight: '#FDF0ED',
+            borderWarm: '#E8DFD5',
+          },
+          fontFamily: {
+            sans: ['"Noto Sans TC"', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+          boxShadow: {
+            soft: '0 10px 30px -10px rgba(58, 50, 44, 0.08)',
+            card: '0 4px 16px -4px rgba(58, 50, 44, 0.06)',
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* 投影片進場微動畫 */
+    @keyframes slideFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .slide-active {
+      display: flex !important;
+      animation: slideFadeIn 0.3s ease-out forwards;
+    }
+    /* 自訂捲軸，保持溫暖簡潔 */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #FDFBF7;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #D9CFC3;
+      border-radius: 9999px;
+    }
+    /* 數字輸入框隱藏預設上下箭頭 */
+    input[type='number']::-webkit-inner-spin-button,
+    input[type='number']::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body class="bg-cream text-ink font-sans antialiased min-h-screen flex flex-col overflow-x-hidden selection:bg-caramel/20 selection:text-ink">
+
+  <!-- 頂部閱讀進度條與導覽列 -->
+  <header class="sticky top-0 z-30 bg-cream/90 backdrop-blur-md border-b border-borderWarm">
+    <!-- 進度條 -->
+    <div class="w-full h-1.5 bg-sand overflow-hidden">
+      <div id="progressBar" class="h-full bg-caramel transition-all duration-300 ease-out rounded-r-full" style="width: 11.11%;"></div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-3">
+      <!-- 品牌識別 -->
+      <button onclick="goToSlide(0)" class="flex items-center gap-2.5 text-left group focus:outline-none">
+        <span class="w-8 h-8 rounded-xl bg-caramel text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+          <!-- 簡約貓掌 SVG -->
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <circle cx="7" cy="9.5" r="2" />
+            <circle cx="12" cy="7.5" r="2" />
+            <circle cx="17" cy="9.5" r="2" />
+            <path d="M12 12c-3.2 0-5.5 2.4-5.5 4.8 0 1.5 1.2 2.7 2.8 2.7 1 0 1.8-.4 2.7-.4s1.7.4 2.7.4c1.6 0 2.8-1.2 2.8-2.7C17.5 14.4 15.2 12 12 12z" />
+          </svg>
+        </span>
+        <div class="leading-tight">
+          <p class="text-sm sm:text-base font-bold text-ink tracking-tight">喜拿喵式會社</p>
+          <p class="text-[11px] sm:text-xs text-muted hidden sm:block">LLM Wiki 驅動教學簡報</p>
+        </div>
+      </button>
+
+      <!-- 右側工具：目錄跳轉按鈕 -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <span id="headerSlideTag" class="hidden md:inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-sand text-muted">
+          封面頁
+        </span>
+        <button
+          id="tocToggleBtn"
+          onclick="toggleTocModal()"
+          aria-expanded="false"
+          class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-borderWarm text-sm font-semibold text-ink hover:border-caramel hover:text-caramel shadow-sm transition-colors"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10" />
+          </svg>
+          <span>目錄跳轉</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 目錄跳轉彈出選單 (Modal) -->
+  <div id="tocModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-ink/40 backdrop-blur-xs p-4" onclick="closeTocOnBackdrop(event)">
+    <div class="bg-cream border border-borderWarm rounded-3xl shadow-2xl w-full max-w-lg max-h-[85vh] flex flex-col overflow-hidden">
+      <div class="px-6 py-4 border-b border-borderWarm flex items-center justify-between bg-white">
+        <div>
+          <h2 class="text-lg font-bold text-ink">簡報目錄跳轉</h2>
+          <p class="text-xs text-muted mt-0.5">點擊任一頁碼即可快速前往</p>
+        </div>
+        <button onclick="toggleTocModal(false)" class="p-2 rounded-xl text-muted hover:bg-sand hover:text-ink transition-colors" aria-label="關閉目錄">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div id="tocList" class="p-4 overflow-y-auto space-y-2">
+        <!-- 由 JS 動態產生 9 頁目錄 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 主要投影片舞台 -->
+  <main id="slideStage" class="flex-1 flex items-center justify-center px-3 sm:px-6 py-4 sm:py-6">
+    <div class="w-full max-w-5xl bg-white border border-borderWarm rounded-3xl shadow-soft min-h-[540px] sm:min-h-[600px] flex flex-col justify-between relative overflow-hidden">
+
+      <!-- ========================================================= -->
+      <!-- 第 1 頁：封面 -->
+      <!-- ========================================================= -->
+      <section class="slide hidden flex-col justify-between flex-1 p-6 sm:p-12 pb-16 sm:pb-16" data-title="封面：新手養貓入門" data-source="wiki-index.md">
+        <div class="flex-1 flex flex-col justify-center items-start max-w-3xl mx-auto w-full">
+          <div class="flex flex-wrap items-center gap-2 mb-6">
+            <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-caramelLight border border-caramel/25 text-caramel text-xs sm:text-sm font-semibold">
+              📖 5 篇網路實證文獻 Ingest
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-sageLight border border-sage/25 text-sage text-xs sm:text-sm font-semibold">
+              ✓ 100% 知識溯源對應
+            </span>
+          </div>
+
+          <h1 class="text-3xl sm:text-5xl font-extrabold text-ink leading-tight tracking-tight mb-4">
+            新手養貓入門：<br class="sm:hidden" />
+            <span class="text-caramel">5 大核心照護指南</span>
+          </h1>
+
+          <p class="text-lg sm:text-2xl font-medium text-muted mb-3 leading-relaxed">
+            從零建立正確觀念，基於 LLM Wiki 獸醫實證知識庫
+          </p>
+
+          <p class="text-sm sm:text-base text-sage font-semibold bg-sageLight px-4 py-2 rounded-xl border border-sage/20 mb-8">
+            收錄 DOC-01 ~ DOC-05 外部獸醫師與專業寵物醫療文獻
+          </p>
+
+          <div class="flex flex-wrap items-center gap-4">
+            <button
+              onclick="nextSlide()"
+              class="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-caramel text-white font-bold text-base sm:text-lg shadow-md hover:bg-[#c56734] active:scale-[0.98] transition-all"
+            >
+              <span>開始瀏覽</span>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </button>
+            <button
+              onclick="toggleTocModal(true)"
+              class="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl bg-sand text-ink font-semibold text-sm sm:text-base hover:bg-borderWarm/70 transition-colors"
+            >
+              瀏覽全部 9 頁大綱
+            </button>
+          </div>
+        </div>
+
+        <!-- 右下角溯源膠囊 -->
+        <div class="flex justify-end mt-6">
+          <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-sand border border-borderWarm text-xs font-medium text-muted">
+            📚 知識來源：wiki-index.md
+          </span>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- 第 2 頁：學習地圖（點擊卡片直接跳轉） -->
+      <!-- ========================================================= -->
+      <section class="slide hidden flex-col justify-between flex-1 p-6 sm:p-10 pb-14" data-title="學習地圖" data-source="wiki-index.md">
+        <div class="flex-1 flex flex-col justify-center">
+          <div class="mb-6">
+            <span class="text-xs font-bold uppercase tracking-wider text-caramel">LEARNING MAP</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-ink mt-1">5 大核心照護模組</h2>
+            <p class="text-sm sm:text-base text-muted mt-1">點擊下方任一張卡片，即可直接跳轉至對應教學投影片。</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- 卡片 1 -->
+            <button onclick="goToSlide(2)" class="text-left p-5 rounded-2xl bg-cream border border-borderWarm hover:border-caramel hover:shadow-card transition-all group">
+              <div class="flex items-center justify-between mb-3">
+                <span class="w-10 h-10 rounded-xl bg-caramelLight text-caramel font-extrabold flex items-center justify-center text-lg">01</span>
+                <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-white border border-borderWarm text-muted group-hover:text-caramel">DOC-01</span>
+              </div>
+              <h3 class="text-lg font-bold text-ink group-hover:text-caramel transition-colors">主食挑選</h3>
+              <p class="text-sm text-muted mt-1">AAFCO 蛋白標準、動物性脂肪、每日熱量公式與主/副食罐分辨。</p>
+            </button>
+
+            <!-- 卡片 2 -->
+            <button onclick="goToSlide(3)" class="text-left p-5 rounded-2xl bg-cream border border-borderWarm hover:border-sage hover:shadow-card transition-all group">
+              <div class="flex items-center justify-between mb-3">
+                <span class="w-10 h-10 rounded-xl bg-sageLight text-sage font-extrabold flex items-center justify-center text-lg">02</span>
+                <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-white border border-borderWarm text-muted group-hover:text-sage">DOC-02</span>
+              </div>
+              <h3 class="text-lg font-bold text-ink group-hover:text-sage transition-colors">飲水泌尿</h3>
+              <p class="text-sm text-muted mt-1">即時飲水量計算器、濕食尿量差異與 24 小時排尿急症警訊。</p>
+            </button>
+
+            <!-- 卡片 3 -->
+            <button onclick="goToSlide(4)" class="text-left p-5 rounded-2xl bg-cream border border-borderWarm hover:border-caramel hover:shadow-card transition-all group">
+              <div class="flex items-center justify-between mb-3">
+                <span class="w-10 h-10 rounded-xl bg-caramelLight text-caramel font-extrabold flex items-center justify-center text-lg">03</span>
+                <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-white border border-borderWarm text-muted group-hover:text-caramel">DOC-03</span>
+              </div>
+              <h3 class="text-lg font-bold text-ink group-hover:text-caramel transition-colors">凍乾零食</h3>
+              <p class="text-sm text-muted mt-1">WSAVA 10% 熱量上限法則、純肉凍乾挑選與挑食處理原則。</p>
+            </button>
+
+            <!-- 卡片 4 -->
+            <button onclick="goToSlide(5)" class="text-left p-5 rounded-2xl bg-cream border border-borderWarm hover:border-sage hover:shadow-card transition-all group">
+              <div class="flex items-center justify-between mb-3">
+                <span class="w-10 h-10 rounded-xl bg-sageLight text-sage font-extrabold flex items-center justify-center text-lg">04</span>
+                <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-white border border-borderWarm text-muted group-hover:text-sage">DOC-04</span>
+              </div>
+              <h3 class="text-lg font-bold text-ink group-hover:text-sage transition-colors">梳毛關節</h3>
+              <p class="text-sm text-muted mt-1">長短毛梳毛排毛重點、減重與防滑護關節，辨識隱藏痛覺訊號。</p>
+            </button>
+
+            <!-- 卡片 5 -->
+            <button onclick="goToSlide(6)" class="text-left p-5 rounded-2xl bg-alertLight/60 border border-alert/25 hover:border-alert hover:shadow-card transition-all group sm:col-span-2 lg:col-span-2">
+              <div class="flex items-center justify-between mb-3">
+                <span class="w-10 h-10 rounded-xl bg-alert text-white font-extrabold flex items-center justify-center text-lg">05</span>
+                <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-white border border-alert/30 text-alert">DOC-05 必讀紅線</span>
+              </div>
+              <h3 class="text-lg font-bold text-alert">毒物急救</h3>
+              <p class="text-sm text-muted mt-1">百合花 12–72 小時急腎衰竭、蔥類貧血、誤食急救三步驟與禁自行催吐。</p>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex justify-end mt-6">
+          <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-sand border border-borderWarm text-xs font-medium text-muted">
+            📚 知識來源：wiki-index.md
+          </span>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- 第 3 頁：模組一：主食挑選基礎 (DOC-01) -->
+      <!-- ========================================================= -->
+      <section class="slide hidden flex-col justify-between flex-1 p-6 sm:p-10 pb-14" data-title="模組一：主食挑選基礎" data-source="DOC-01 | Abao 吳乃聖獸醫師 / PetTalk">
+        <div class="flex-1 flex flex-col justify-center space-y-4">
+          <div>
+            <span class="inline-block px-3 py-1 rounded-full bg-caramelLight text-caramel text-xs font-bold mb-2">模組一｜DOC-01 飲食基礎</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-ink">主食挑選基礎</h2>
+          </div>
+
+          <!-- 核心數據卡片 -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-4 sm:p-5 rounded-2xl bg-cream border border-borderWarm space-y-2.5">
+              <h3 class="text-base font-bold text-caramel flex items-center gap-2">
+                <span>🥩 絕對肉食的營養關鍵</span>
+              </h3>
+              <ul class="space-y-2 text-sm sm:text-base text-ink leading-relaxed">
+                <li class="flex items-start gap-2">
+                  <span class="text-caramel font-bold">•</span>
+                  <span><strong>AAFCO 最低蛋白標準</strong>：成貓至少 <strong>26%</strong>、幼貓至少 <strong>30%</strong>；獸醫建議優先挑選 <strong>35%–45% 動物性蛋白質</strong>。</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-caramel font-bold">•</span>
+                  <span><strong>必須為動物性脂肪</strong>：貓無法自行將植物油轉換為必需脂肪酸「<strong>花生四烯酸</strong>」。</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="p-4 sm:p-5 rounded-2xl bg-sageLight/50 border border-sage/25 flex flex-col justify-between space-y-3">
+              <div>
+                <h3 class="text-base font-bold text-sage flex items-center gap-2 mb-2.5">
+                  <span>🔥 每日熱量計算公式</span>
+                </h3>
+                <div class="space-y-2 text-sm sm:text-base">
+                  <div class="p-2.5 rounded-xl bg-white border border-sage/20 flex items-center justify-between gap-2">
+                    <span class="font-semibold text-ink">結紮成貓</span>
+                    <span class="font-mono font-bold text-sage">體重(kg) × 47 大卡</span>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-white border border-sage/20 flex items-center justify-between gap-2">
+                    <span class="font-semibold text-ink">未結紮成貓</span>
+                    <span class="font-mono font-bold text-caramel">體重(kg) × 56 大卡</span>
+                  </div>
+                </div>
+              </div>
+              <p class="text-xs text-muted">例如：5 kg 結紮成貓每日所需熱量約為 235 大卡，避免任食造成肥胖。</p>
+            </div>
+          </div>
+
+          <!-- 實作要點 + 新手地雷 -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-4 rounded-2xl bg-white border border-borderWarm">
+              <h3 class="text-sm sm:text-base font-bold text-ink mb-2">✅ 新手挑選實作</h3>
+              <ul class="space-y-1.5 text-sm text-ink">
+                <li>• 明確區分「<strong>主食罐</strong>」與「<strong>副食罐</strong>」，正餐須選營養均衡的主食罐。</li>
+                <li>• 台灣氣候潮濕，乾糧優先選<strong>小包裝且附夾鏈袋</strong>設計防受潮。</li>
+              </ul>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-alertLight border border-alert/30 flex items-start gap-2.5">
+              <span class="text-lg leading-none mt-0.5">⚠️</span>
+              <p class="text-sm text-ink leading-relaxed">
+                <strong class="text-alert">新手地雷：</strong>避開成分標示模糊的「<strong>肉製品 / 動物副產品</strong>」廉價飼料，並控管熱量防範肥胖與脂肪肝。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-end mt-5">
+          <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-sand border border-borderWarm text-xs font-medium text-muted">
+            📚 知識來源：DOC-01 | Abao 吳乃聖獸醫師 / PetTalk
+          </span>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- 第 4 頁：模組二：飲水與泌尿道保健 (DOC-02) -->
+      <!-- ========================================================= -->
+      <section class="slide hidden flex-col justify-between flex-1 p-6 sm:p-10 pb-14" data-title="模組二：飲水與泌尿道保健" data-source="DOC-02 | HOMI毛與家 / 萊奧動物醫療中心">
+        <div class="flex-1 flex flex-col justify-center space-y-5">
+          <div>
+            <span class="inline-block px-3 py-1 rounded-full bg-sageLight text-sage text-xs font-bold mb-2">模組二｜DOC-02 補水關鍵</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-ink">飲水與泌尿道保健</h2>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+            <!-- 左側：即時飲水量計算器 -->
+            <div class="lg:col-span-6 p-5 rounded-2xl bg-sageLight/70 border border-sage/30 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <h3 class="text-base sm:text-lg font-bold text-sage flex items-center gap-2">
+                    <span>💧 即時飲水量計算器</span>
+                  </h3>
+                  <span class="text-xs font-medium text-sage bg-white px-2.5 py-1 rounded-full border border-sage/20">體重 × 40～60 ml</span>
+                </div>
+
+                <label for="catWeightInput" class="block text-sm font-semibold text-ink mb-2">
+                  請輸入或調整貓咪體重（公斤 / kg）：
+                </label>
+
+                <div class="flex items-center gap-2 mb-3">
+                  <button type="button" onclick="adjustWeight(-0.5)" class="w-10 h-10 rounded-xl bg-white border border-sage/30 text-sage font-bold text-lg hover:bg-sage hover:text-white transition-colors">−</button>
+                  <input
+                    id="catWeightInput"
+                    type="number"
+                    min="0.5"
+                    max="15"
+                    step="0.1"
+                    value="4"
+                    oninput="updateWaterCalc()"
+                    class="flex-1 h-10 px-3 rounded-xl bg-white border border-sage/40 text-center text-lg font-extrabold text-ink focus:outline-none focus:ring-2 focus:ring-sage"
+                  />
+                  <span class="text-sm font-bold text-muted px-1">kg</span>
+                  <button type="button" onclick="adjustWeight(0.5)" class="w-10 h-10 rounded-xl bg-white border border-sage/30 text-sage font-bold text-lg hover:bg-sage hover:text-white transition-colors">+</button>
+                </div>
+
+                <!-- 滑桿輔助 -->
+                <input
+                  id="catWeightRange"
+                  type="range"
+                  min="1"
+                  max="12"
+                  step="0.5"
+                  value="4"
+                  oninput="syncWeightFromRange()"
+                  class="w-full accent-sage cursor-pointer mb-4"
+                />
+              </div>
+
+              <!-- 計算結果顯示區 -->
+              <div class="p-4 rounded-xl bg-white border border-sage/25 text-center shadow-xs">
+                <p class="text-xs font-semibold text-muted">每日建議總攝水量（含濕食水分）</p>
+                <p id="waterResultText" class="text-2xl sm:text-3xl font-extrabold text-sage mt-1">
+                  160 ～ 240 ml
+                </p>
+                <p id="waterSubNote" class="text-xs text-muted mt-1">大約等於 0.8 ～ 1.2 碗標準貓水碗（以 200 ml / 碗計算）</p>
+              </div>
+            </div>
+
+            <!-- 右側：核心實證數據 + 地雷提醒 -->
+            <div class="lg:col-span-6 flex flex-col justify-between gap-4">
+              <div class="p-5 rounded-2xl bg-cream border border-borderWarm flex-1">
+                <h3 class="text-base font-bold text-ink mb-3">獸醫實證補水與排尿指標</h3>
+                <ul class="space-y-3 text-sm sm:text-base">
+                  <li class="flex items-start gap-2.5">
+                    <span class="w-6 h-6 rounded-lg bg-sage text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">1</span>
+                    <span><strong>濕食尿量翻倍</strong>：食物含水量從 <strong>10%（乾糧）</strong>提升至 <strong>75%（濕食）</strong>時，每日平均尿量增加近一倍。</span>
+                  </li>
+                  <li class="flex items-start gap-2.5">
+                    <span class="w-6 h-6 rounded-lg bg-sage text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">2</span>
+                    <span><strong>健康排尿頻率</strong>：成貓每日排尿 <strong>2–4 次</strong>；若<strong>超過 24 小時未排尿</strong>為尿道阻塞急症，須立即就醫！</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-alertLight border border-alert/30 flex items-start gap-2.5">
+                <span class="text-lg leading-none">⚠️</span>
+                <p class="text-sm text-ink leading-relaxed">
+                  <strong class="text-alert">地雷提醒：</strong>切勿未經獸醫指示，長期使用<strong>針筒強迫灌水</strong>，反而會造成貓咪高度緊迫與抗拒喝水。
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-end mt-5">
+          <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-sand border border-borderWarm text-xs font-medium text-muted">
+            📚 知識來源：DOC-02 | HOMI毛與家 / 萊奧動物醫療中心
+          </span>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- 第 5 頁：模組三：凍乾與零食餵食原則 (DOC-03) -->
+      <!-- ========================================================= -->
+      <section class="slide hidden flex-col justify-between flex-1 p-6 sm:p-10 pb-14" data-title="模組三：凍乾與零食餵食原則" data-source="DOC-03 | 喵皇學堂 / 獸研所">
+        <div class="flex-1 flex flex-col justify-center space-y-5">
+          <div>
+            <span class="inline-block px-3 py-1 rounded-full bg-caramelLight text-caramel text-xs font-bold mb-2">模組三｜DOC-03 獎勵與互動</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-ink">凍乾與零食餵食原則</h2>
+          </div>
+
+          <!-- WSAVA 10% 法則視覺條 -->
+          <div class="p-5 rounded-2xl bg-cream border border-borderWarm">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <h3 class="text-base sm:text-lg font-bold text-ink">WSAVA（世界小動物獸醫師協會）10% 法則</h3>
+              <span class="text-xs sm:text-sm font-semibold text-caramel bg-caramelLight px-3 py-1 rounded-full">例：每日 250 大卡 → 零食上限 25 大卡</span>
+            </div>
+
+            <!-- 視覺比例長條 -->
+            <div class="w-full h-11 rounded-2xl overflow-hidden flex font-bold text-xs sm:text-sm shadow-inner">
+              <div class="w-[90%] bg-sage text-white flex items-center justify-center px-3">
+                90% 均衡主食（完整維生素與礦物質來源）
+              </div>
+              <div class="w-[10%] min-w-[82px] bg-caramel text-white flex items-center justify-center px-2 border-l-2 border-white">
+                ≤ 10% 零食
+              </div>
+            </div>
+          </div>
+
+          <!-- 挑選重點 + 訓練時機 -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-5 rounded-2xl bg-white border border-borderWarm shadow-xs">
+              <h3 class="text-base sm:text-lg font-bold text-ink mb-3 flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-caramelLight text-caramel flex items-center justify-center text-sm">✓</span>
+                挑選與餵食實作
+              </h3>
+              <ul class="space-y-2.5 text-sm sm:text-base text-ink">
+                <li class="flex items-start gap-2">
+                  <span class="text-caramel font-bold">•</span>
+                  <span><strong>純肉原型凍乾</strong>：挑選成分單純、無多餘糖鹽與人工色素的凍乾。</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-caramel font-bold">•</span>
+                  <span><strong>黃金獎勵時機</strong>：訓練獎勵應在目標行為發生後 <strong>1–2 秒內</strong>給予，並計入每日 10% 額度。</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-alertLight/80 border border-alert/30 flex flex-col justify-center space-y-2.5">
+              <h3 class="text-base sm:text-lg font-bold text-alert flex items-center gap-2">
+                <span>⚠️ 兩大餵食地雷</span>
+              </h3>
+              <ul class="space-y-2 text-sm sm:text-base text-ink">
+                <li class="flex items-start gap-2">
+                  <span class="text-alert font-bold">•</span>
+                  <span><strong>挑食反給更多零食</strong>：貓咪不吃主食時，應先<strong>暫停零食</strong>並觀察食慾恢復，切勿用零食填飽肚子。</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-alert font-bold">•</span>
+                  <span><strong>禁餵人類重口味食物</strong>：高鹽、高糖、高鈉會長期增加腎臟負擔。</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-end mt-5">
+          <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-sand border border-borderWarm text-xs font-medium text-muted">
+            📚 知識來源：DOC-03 | 喵皇學堂 / 獸研所
+          </span>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- 第 6 頁：模組四：梳毛排毛與日常關節保護 (DOC-04) -->
+      <!-- ========================================================= -->
+      <section class="slide hidden flex-col justify-between flex-1 p-6 sm:p-10 pb-14" data-title="模組四：梳毛排毛與日常關節保護" data-source="DOC-04 | 木入森 / Ab寵物">
+        <div class="flex-1 flex flex-col justify-center space-y-5">
+          <div>
+            <span class="inline-block px-3 py-1 rounded-full bg-sageLight text-sage text-xs font-bold mb-2">模組四｜DOC-04 日常保養</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-ink">梳毛排毛與日常關節保護</h2>
+          </div>
+
+          <!-- 雙欄設計 -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <!-- 左欄：梳毛排毛 -->
+            <div class="p-5 rounded-2xl bg-cream border border-borderWarm flex flex-col justify-between space-y-3">
+              <div>
+                <div class="flex items-center gap-2.5 mb-3">
+                  <span class="w-10 h-10 rounded-xl bg-caramelLight text-caramel flex items-center justify-center text-xl">🪮</span>
+                  <h3 class="text-lg font-bold text-ink">排毛第一步：先梳掉鬆毛</h3>
+                </div>
+                <ul class="space-y-2.5 text-sm sm:text-base text-ink leading-relaxed">
+                  <li class="flex items-start gap-2">
+                    <span class="text-caramel font-bold">●</span>
+                    <span><strong>長毛貓</strong>：建議<strong>每日梳理</strong>，特別留意<strong>耳後、腋下、腹部、後腿內側</strong>易打結處。</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="text-caramel font-bold">●</span>
+                    <span><strong>短毛貓</strong>：每週梳理 <strong>2–3 次</strong>，換毛期再提高頻率。</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="p-3 rounded-xl bg-alertLight border border-alert/25 text-xs sm:text-sm text-ink">
+                <strong class="text-alert">⚠️ 提醒：</strong>發現大面積貼皮毛結<strong>切勿硬剪</strong>，易剪傷皮膚，應交由專業美容或獸醫處理。
+              </div>
+            </div>
+
+            <!-- 右欄：關節保護 -->
+            <div class="p-5 rounded-2xl bg-sageLight/50 border border-sage/25 flex flex-col justify-between space-y-3">
+              <div>
+                <div class="flex items-center gap-2.5 mb-3">
+                  <span class="w-10 h-10 rounded-xl bg-white text-sage border border-sage/20 flex items-center justify-center text-xl">🐾</span>
+                  <h3 class="text-lg font-bold text-ink">日常關節保護與環境</h3>
+                </div>
+                <ul class="space-y-2.5 text-sm sm:text-base text-ink leading-relaxed">
+                  <li class="flex items-start gap-2">
+                    <span class="text-sage font-bold">●</span>
+                    <span><strong>體重控制</strong>：過重是關節最大殺手，<strong>減少 10% 體重</strong>即可顯著減輕關節負擔。</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="text-sage font-bold">●</span>
+                    <span><strong>友善環境</strong>：磁磚鋪設<strong>防滑墊</strong>、床邊設<strong>矮階梯</strong>分段跳躍，並<strong>定期修剪指甲</strong>避免改變落地角度。</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="p-3 rounded-xl bg-white border border-sage/25 text-xs sm:text-sm text-ink">
+                <strong class="text-sage">🔍 隱藏痛覺訊號：</strong>跳上沙發<strong>改分兩段跳</strong>、<strong>不再舔背部</strong>、<strong>不愛被碰後肢</strong>。
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-end mt-5">
+          <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-sand border border-borderWarm text-xs font-medium text-muted">
+            📚 知識來源：DOC-04 | 木入森 / Ab寵物
+          </span>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- 第 7 頁：模組五：新手致命毒物與急救誤區 (DOC-05) -->
+      <!-- ========================================================= -->
+      <section class="slide hidden flex-col justify-between flex-1 p-6 sm:p-10 pb-14" data-title="模組五：新手致命毒物與急救誤區" data-source="DOC-05 | 全國動物醫院 / 法國皇家">
+        <div class="flex-1 flex flex-col justify-center space-y-4">
+          <div>
+            <span class="inline-block px-3 py-1 rounded-full bg-alertLight text-alert text-xs font-bold mb-2">模組五｜DOC-05 安全紅線（必背）</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-alert">新手致命毒物與急救誤區</h2>
+          </div>
+
+          <!-- 紅色警戒區 -->
+          <div class="p-5 rounded-2xl bg-alertLight border-2 border-alert/40 space-y-3">
+            <h3 class="text-base font-extrabold text-alert flex items-center gap-2">
+              <span>🚨 高度致死毒物警戒</span>
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+              <div class="p-4 rounded-xl bg-white border border-alert/25">
+                <p class="font-extrabold text-alert mb-1.5">🌸 頭號植物殺手：百合花</p>
+                <p class="text-ink leading-relaxed">
+                  <strong>花葉、花粉、花瓶水</strong>全株皆劇毒！誤食後 <strong>12–24 小時內傷腎</strong>，<strong>24–72 小時惡化為致命急性腎衰竭</strong>。
+                </p>
+              </div>
+              <div class="p-4 rounded-xl bg-white border border-alert/25">
+                <p class="font-extrabold text-alert mb-1.5">🧅 致命飲食與人類藥品</p>
+                <p class="text-ink leading-relaxed">
+                  <strong>蔥類（洋蔥、大蒜、青蔥、韭菜）</strong>含硫化物，造成<strong>溶血性貧血</strong>；<strong>巧克力、咖啡因與人類止痛藥</strong>亦具劇毒。
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 急救三步驟 + 嚴禁催吐 -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+            <div class="md:col-span-7 p-4 rounded-2xl bg-cream border border-borderWarm">
+              <h3 class="text-sm sm:text-base font-bold text-ink mb-2">🏥 懷疑誤食急救三步驟</h3>
+              <div class="flex flex-wrap items-center gap-2 text-sm font-semibold text-ink">
+                <span class="px-3 py-1.5 rounded-xl bg-white border border-borderWarm">1. 帶離毒源</span>
+                <span class="text-caramel">→</span>
+                <span class="px-3 py-1.5 rounded-xl bg-white border border-borderWarm">2. 收集殘枝 / 包裝樣本</span>
+                <span class="text-caramel">→</span>
+                <span class="px-3 py-1.5 rounded-xl bg-alert text-white">3. 立即送醫</span>
+              </div>
+            </div>
+
+            <div class="md:col-span-5 p-4 rounded-2xl bg-ink text-cream flex flex-col justify-center">
+              <p class="text-xs font-bold text-caramel uppercase tracking-wider mb-1">DANGER MYTH</p>
+              <h3 class="text-base font-bold mb-1">⛔ 嚴禁在家自行催吐</h3>
+              <p class="text-sm text-cream/90 leading-relaxed">
+                自行催吐極易引發<strong>吸入性肺炎</strong>造成二次傷害，請務必交由獸醫專業處置。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-end mt-5">
+          <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-sand border border-borderWarm text-xs font-medium text-muted">
+            📚 知識來源：DOC-05 | 全國動物醫院 / 法國皇家
+          </span>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- 第 8 頁：新手實作互動檢核表 -->
+      <!-- ========================================================= -->
+      <section class="slide hidden flex-col justify-between flex-1 p-6 sm:p-10 pb-14" data-title="新手實作互動檢核表" data-source="DOC-01 ~ DOC-05">
+        <div class="flex-1 flex flex-col justify-center space-y-5">
+          <div class="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <span class="inline-block px-3 py-1 rounded-full bg-caramelLight text-caramel text-xs font-bold mb-2">ACTION CHECKLIST</span>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-ink">新手實作互動檢核表</h2>
+              <p class="text-sm text-muted mt-1">點擊勾選你已經確認完成的日常照護項目，立即查看準備度！</p>
+            </div>
+
+            <!-- 即時完成度徽章 -->
+            <div class="flex items-center gap-3 bg-cream border border-borderWarm px-4 py-2.5 rounded-2xl">
+              <div class="text-right">
+                <p class="text-xs text-muted font-medium">目前完成度</p>
+                <p id="checkPercent" class="text-2xl font-extrabold text-caramel leading-none mt-0.5">0%</p>
+              </div>
+              <div class="w-24 h-2.5 bg-sand rounded-full overflow-hidden">
+                <div id="checkProgressBar" class="h-full bg-sage transition-all duration-300" style="width: 0%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5 項可勾選清單 -->
+          <div class="space-y-2.5" id="checklistContainer">
+            <label class="flex items-center gap-3.5 p-3.5 sm:p-4 rounded-2xl bg-cream border border-borderWarm hover:border-caramel cursor-pointer transition-all select-none">
+              <input type="checkbox" class="checklist-item w-5 h-5 accent-sage rounded cursor-pointer shrink-0" onchange="updateChecklist()" />
+              <span class="flex-1 text-sm sm:text-base font-medium text-ink">1. 挑選符合 AAFCO 標準且高動物性蛋白（35%–45%）的主食，並依體重控管熱量</span>
+              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-white border border-borderWarm text-muted shrink-0">DOC-01</span>
+            </label>
+
+            <label class="flex items-center gap-3.5 p-3.5 sm:p-4 rounded-2xl bg-cream border border-borderWarm hover:border-caramel cursor-pointer transition-all select-none">
+              <input type="checkbox" class="checklist-item w-5 h-5 accent-sage rounded cursor-pointer shrink-0" onchange="updateChecklist()" />
+              <span class="flex-1 text-sm sm:text-base font-medium text-ink">2. 算出每日需水量（體重 × 40–60 ml），留意每天排尿 2–4 次</span>
+              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-white border border-borderWarm text-muted shrink-0">DOC-02</span>
+            </label>
+
+            <label class="flex items-center gap-3.5 p-3.5 sm:p-4 rounded-2xl bg-cream border border-borderWarm hover:border-caramel cursor-pointer transition-all select-none">
+              <input type="checkbox" class="checklist-item w-5 h-5 accent-sage rounded cursor-pointer shrink-0" onchange="updateChecklist()" />
+              <span class="flex-1 text-sm sm:text-base font-medium text-ink">3. 遵守 WSAVA 10% 法則，選用無多餘糖鹽的純肉原型凍乾</span>
+              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-white border border-borderWarm text-muted shrink-0">DOC-03</span>
+            </label>
+
+            <label class="flex items-center gap-3.5 p-3.5 sm:p-4 rounded-2xl bg-cream border border-borderWarm hover:border-caramel cursor-pointer transition-all select-none">
+              <input type="checkbox" class="checklist-item w-5 h-5 accent-sage rounded cursor-pointer shrink-0" onchange="updateChecklist()" />
+              <span class="flex-1 text-sm sm:text-base font-medium text-ink">4. 依毛長規律梳毛排毛，並於磁磚鋪防滑墊、設置分段矮階梯</span>
+              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-white border border-borderWarm text-muted shrink-0">DOC-04</span>
+            </label>
+
+            <label class="flex items-center gap-3.5 p-3.5 sm:p-4 rounded-2xl bg-cream border border-borderWarm hover:border-caramel cursor-pointer transition-all select-none">
+              <input type="checkbox" class="checklist-item w-5 h-5 accent-sage rounded cursor-pointer shrink-0" onchange="updateChecklist()" />
+              <span class="flex-1 text-sm sm:text-base font-medium text-ink">5. 確認家中零百合花與收好蔥蒜、巧克力及人類藥品，熟記急救三步驟</span>
+              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-white border border-borderWarm text-muted shrink-0">DOC-05</span>
+            </label>
+          </div>
+
+          <!-- 動態鼓勵回饋區 -->
+          <div id="checkFeedback" class="p-3.5 rounded-2xl bg-sageLight/60 border border-sage/25 text-sm sm:text-base font-semibold text-sage text-center transition-all">
+            🐾 一步步檢查，為毛孩打造安心又健康的生活環境吧！
+          </div>
+        </div>
+
+        <div class="flex justify-end mt-5">
+          <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-sand border border-borderWarm text-xs font-medium text-muted">
+            📚 知識來源：DOC-01 ~ DOC-05
+          </span>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- 第 9 頁：LLM Wiki 知識溯源總表與外部參考連結 -->
+      <!-- ========================================================= -->
+      <section class="slide hidden flex-col justify-between flex-1 p-6 sm:p-10 pb-14" data-title="知識溯源總表與外部參考連結" data-source="wiki-index.md (全庫索引)">
+        <div class="flex-1 flex flex-col justify-center space-y-5">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <span class="inline-block px-3 py-1 rounded-full bg-sageLight text-sage text-xs font-bold mb-2">PROVENANCE &amp; REFERENCES</span>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-ink">LLM Wiki 知識溯源總表與外部參考連結</h2>
+            </div>
+            <button
+              onclick="goToSlide(0)"
+              class="px-4 py-2 rounded-xl bg-caramelLight border border-caramel/30 text-caramel font-bold text-xs sm:text-sm hover:bg-caramel hover:text-white transition-colors"
+            >
+              回到封面 ↺
+            </button>
+          </div>
+
+          <!-- 溯源對應表（含可點擊外部參考連結） -->
+          <div class="rounded-2xl border border-borderWarm overflow-hidden bg-white">
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs sm:text-sm text-left">
+                <thead class="bg-sand text-ink border-b border-borderWarm">
+                  <tr>
+                    <th class="py-2.5 px-3 sm:px-4 font-bold whitespace-nowrap">文件編號</th>
+                    <th class="py-2.5 px-3 sm:px-4 font-bold whitespace-nowrap">對應頁數</th>
+                    <th class="py-2.5 px-3 sm:px-4 font-bold">外部真實參考來源（點擊開啟新分頁）</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-borderWarm/60">
+                  <tr class="hover:bg-cream/60 transition-colors">
+                    <td class="py-2.5 px-3 sm:px-4 font-bold text-ink whitespace-nowrap">DOC-01 主食挑選</td>
+                    <td class="py-2.5 px-3 sm:px-4 whitespace-nowrap">
+                      <button onclick="goToSlide(2)" class="px-2.5 py-1 rounded-lg bg-caramelLight text-caramel font-bold hover:bg-caramel hover:text-white transition-colors">第 3 頁</button>
+                    </td>
+                    <td class="py-2.5 px-3 sm:px-4 space-y-1">
+                      <a href="https://www.abaopet.com.tw/pages/abao-veterinarian-3" target="_blank" rel="noopener noreferrer" class="block text-sage hover:text-caramel underline underline-offset-2">↗ Abao 吳乃聖獸醫師：挑選貓咪飼料的原則</a>
+                      <a href="https://www.pettalk.tw/blog/【PetTalk分析報告】貓咪主食罐怎麼挑？獸醫師告訴你！｜專業獸醫—吳乃聖" target="_blank" rel="noopener noreferrer" class="block text-sage hover:text-caramel underline underline-offset-2">↗ PetTalk 吳乃聖獸醫師：貓咪主食罐怎麼挑？</a>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-cream/60 transition-colors">
+                    <td class="py-2.5 px-3 sm:px-4 font-bold text-ink whitespace-nowrap">DOC-02 飲水泌尿</td>
+                    <td class="py-2.5 px-3 sm:px-4 whitespace-nowrap">
+                      <button onclick="goToSlide(3)" class="px-2.5 py-1 rounded-lg bg-caramelLight text-caramel font-bold hover:bg-caramel hover:text-white transition-colors">第 4 頁</button>
+                    </td>
+                    <td class="py-2.5 px-3 sm:px-4 space-y-1">
+                      <a href="https://www.homihomy.com.tw/blog/posts/how-much-water-should-dogs-and-cats-drink-in-a-day" target="_blank" rel="noopener noreferrer" class="block text-sage hover:text-caramel underline underline-offset-2">↗ HOMI毛與家：狗貓一天喝多少水才夠？</a>
+                      <a href="https://lamcvet.com/貓咪每天喝水量標準是多少？獸醫教你計算公式與5" target="_blank" rel="noopener noreferrer" class="block text-sage hover:text-caramel underline underline-offset-2">↗ 萊奧動物醫療中心：貓咪每天喝水量標準是多少？</a>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-cream/60 transition-colors">
+                    <td class="py-2.5 px-3 sm:px-4 font-bold text-ink whitespace-nowrap">DOC-03 凍乾零食</td>
+                    <td class="py-2.5 px-3 sm:px-4 whitespace-nowrap">
+                      <button onclick="goToSlide(4)" class="px-2.5 py-1 rounded-lg bg-caramelLight text-caramel font-bold hover:bg-caramel hover:text-white transition-colors">第 5 頁</button>
+                    </td>
+                    <td class="py-2.5 px-3 sm:px-4 space-y-1">
+                      <a href="https://blog.meow-servant.com/zh/articles/cat-treat-guide" target="_blank" rel="noopener noreferrer" class="block text-sage hover:text-caramel underline underline-offset-2">↗ 喵皇學堂：貓咪零食怎麼挑？10% 法則指南</a>
+                      <a href="https://shop.pet100pa.com/pages/how-many-treats-a-cat-can-have-a-day" target="_blank" rel="noopener noreferrer" class="block text-sage hover:text-caramel underline underline-offset-2">↗ 獸研所：貓咪零食攝取量對照表</a>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-cream/60 transition-colors">
+                    <td class="py-2.5 px-3 sm:px-4 font-bold text-ink whitespace-nowrap">DOC-04 梳毛關節</td>
+                    <td class="py-2.5 px-3 sm:px-4 whitespace-nowrap">
+                      <button onclick="goToSlide(5)" class="px-2.5 py-1 rounded-lg bg-caramelLight text-caramel font-bold hover:bg-caramel hover:text-white transition-colors">第 6 頁</button>
+                    </td>
+                    <td class="py-2.5 px-3 sm:px-4 space-y-1">
+                      <a href="https://www.moreson.com.tw/zt/moreson/blog-detail/furkid-knowledge/pet-nutrition/cat-hairball-care/" target="_blank" rel="noopener noreferrer" class="block text-sage hover:text-caramel underline underline-offset-2">↗ 木入森：貓咪毛球怎麼預防？梳毛與排毛照顧</a>
+                      <a href="https://www.abpet.com.tw/blogs/knowledge/joint-support" target="_blank" rel="noopener noreferrer" class="block text-sage hover:text-caramel underline underline-offset-2">↗ Ab寵物：犬貓關節保健全攻略</a>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-cream/60 transition-colors">
+                    <td class="py-2.5 px-3 sm:px-4 font-bold text-ink whitespace-nowrap">DOC-05 毒物急救</td>
+                    <td class="py-2.5 px-3 sm:px-4 whitespace-nowrap">
+                      <button onclick="goToSlide(6)" class="px-2.5 py-1 rounded-lg bg-caramelLight text-caramel font-bold hover:bg-caramel hover:text-white transition-colors">第 7 頁</button>
+                    </td>
+                    <td class="py-2.5 px-3 sm:px-4 space-y-1">
+                      <a href="https://www.vet.com.tw/news/knowledge-cat-lily-poisoning-0220" target="_blank" rel="noopener noreferrer" class="block text-sage hover:text-caramel underline underline-offset-2">↗ 全國動物醫院：貓咪｜百合花中毒</a>
+                      <a href="https://www.royalcanin.com/tw/cats/health-and-wellbeing/foods-that-cats-cannot-eat" target="_blank" rel="noopener noreferrer" class="block text-sage hover:text-caramel underline underline-offset-2">↗ 法國皇家：貓咪不能吃什麼？NG 食物清單</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-end mt-5">
+          <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-sand border border-borderWarm text-xs font-medium text-muted">
+            📚 知識來源：wiki-index.md (全庫索引)
+          </span>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- 底部固定控制列 -->
+  <footer class="sticky bottom-0 z-20 bg-cream/95 backdrop-blur-md border-t border-borderWarm">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
+      <!-- 上一頁按鈕 -->
+      <button
+        id="prevBtn"
+        onclick="prevSlide()"
+        class="inline-flex items-center gap-1.5 px-4 sm:px-5 py-2.5 rounded-xl bg-white border border-borderWarm text-sm sm:text-base font-bold text-ink hover:border-caramel hover:text-caramel disabled:opacity-40 disabled:pointer-events-none shadow-xs transition-colors"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+        <span>上一頁</span>
+      </button>
+
+      <!-- 中央頁碼與快捷鍵提示 -->
+      <div class="flex flex-col items-center">
+        <span id="pageIndicator" class="text-sm sm:text-base font-extrabold text-ink tracking-wide">1 / 9</span>
+        <span class="hidden sm:inline text-[11px] text-muted">支援鍵盤 ← → 或 空白鍵 切換</span>
+      </div>
+
+      <!-- 下一頁按鈕 -->
+      <button
+        id="nextBtn"
+        onclick="nextSlide()"
+        class="inline-flex items-center gap-1.5 px-4 sm:px-5 py-2.5 rounded-xl bg-caramel text-white text-sm sm:text-base font-bold hover:bg-[#c56734] disabled:opacity-40 disabled:pointer-events-none shadow-xs transition-colors"
+      >
+        <span>下一頁</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+  </footer>
+
+  <!-- 互動腳本 -->
+  <script>
+    // 全域狀態管理
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const totalSlides = slides.length;
+    let currentSlide = 0;
+
+    // 觸控滑動座標記錄
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    /**
+     * 渲染指定頁碼的投影片並同步更新進度條、頁碼、按鈕與目錄狀態
+     * @param {number} index - 目標投影片索引 (0 ~ totalSlides - 1)
+     */
+    function renderSlide(index) {
+      try {
+        if (index < 0 || index >= totalSlides) return;
+        currentSlide = index;
+
+        // 切換投影片顯示
+        slides.forEach((slide, i) => {
+          if (i === currentSlide) {
+            slide.classList.add('slide-active');
+          } else {
+            slide.classList.remove('slide-active');
+          }
+        });
+
+        // 更新頁碼顯示
+        const pageIndicator = document.getElementById('pageIndicator');
+        if (pageIndicator) {
+          pageIndicator.textContent = `${currentSlide + 1} / ${totalSlides}`;
+        }
+
+        // 更新頂部標籤
+        const headerSlideTag = document.getElementById('headerSlideTag');
+        if (headerSlideTag) {
+          headerSlideTag.textContent = slides[currentSlide].dataset.title || '';
+        }
+
+        // 更新閱讀進度條
+        const progressBar = document.getElementById('progressBar');
+        if (progressBar) {
+          const percent = ((currentSlide + 1) / totalSlides) * 100;
+          progressBar.style.width = `${percent}%`;
+        }
+
+        // 更新上下頁按鈕禁用狀態
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        if (prevBtn) prevBtn.disabled = currentSlide === 0;
+        if (nextBtn) nextBtn.disabled = currentSlide === totalSlides - 1;
+
+        // 同步目錄高亮
+        buildTocList();
+
+        // 換頁時捲動回頂部，提升行動裝置體驗
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (err) {
+        console.error('切換投影片時發生錯誤:', err);
+      }
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        renderSlide(currentSlide + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        renderSlide(currentSlide - 1);
+      }
+    }
+
+    function goToSlide(index) {
+      renderSlide(index);
+      toggleTocModal(false);
+    }
+
+    /**
+     * 動態建立「目錄跳轉」清單
+     */
+    function buildTocList() {
+      const tocList = document.getElementById('tocList');
+      if (!tocList) return;
+
+      tocList.innerHTML = '';
+      slides.forEach((slide, idx) => {
+        const isCurrent = idx === currentSlide;
+        const title = slide.dataset.title || `第 ${idx + 1} 頁`;
+        const source = slide.dataset.source || '';
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.onclick = () => goToSlide(idx);
+        btn.className = `w-full text-left px-4 py-3 rounded-2xl border transition-all flex items-center justify-between gap-3 ${
+          isCurrent
+            ? 'bg-caramelLight border-caramel text-ink shadow-xs'
+            : 'bg-white border-borderWarm hover:border-caramel/50 text-ink'
+        }`;
+
+        btn.innerHTML = `
+          <div class="flex items-center gap-3 min-w-0">
+            <span class="w-7 h-7 rounded-lg text-xs font-extrabold flex items-center justify-center shrink-0 ${
+              isCurrent ? 'bg-caramel text-white' : 'bg-sand text-muted'
+            }">${idx + 1}</span>
+            <div class="truncate">
+              <p class="text-sm font-bold truncate">${title}</p>
+              <p class="text-[11px] text-muted truncate">📚 ${source}</p>
+            </div>
+          </div>
+          ${isCurrent ? '<span class="text-xs font-bold text-caramel shrink-0">目前頁面</span>' : ''}
+        `;
+        tocList.appendChild(btn);
+      });
+    }
+
+    /**
+     * 開關目錄彈窗
+     * @param {boolean} [forceState] - 強制指定開啟或關閉
+     */
+    function toggleTocModal(forceState) {
+      const modal = document.getElementById('tocModal');
+      const btn = document.getElementById('tocToggleBtn');
+      if (!modal) return;
+
+      const shouldOpen = typeof forceState === 'boolean' ? forceState : modal.classList.contains('hidden');
+      if (shouldOpen) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        if (btn) btn.setAttribute('aria-expanded', 'true');
+      } else {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        if (btn) btn.setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    function closeTocOnBackdrop(event) {
+      if (event.target.id === 'tocModal') {
+        toggleTocModal(false);
+      }
+    }
+
+    /**
+     * 模組二：互動式飲水量計算器邏輯（體重 × 40～60 ml）
+     */
+    function updateWaterCalc() {
+      const input = document.getElementById('catWeightInput');
+      const range = document.getElementById('catWeightRange');
+      const resultText = document.getElementById('waterResultText');
+      const subNote = document.getElementById('waterSubNote');
+      if (!input || !resultText) return;
+
+      let weight = parseFloat(input.value);
+      if (isNaN(weight) || weight <= 0) {
+        resultText.textContent = '請輸入有效體重';
+        if (subNote) subNote.textContent = '例如：一般成貓體重約 3.5 ～ 5.5 kg';
+        return;
+      }
+
+      // 限制合理上限避免跑版
+      if (weight > 20) weight = 20;
+
+      // 同步滑桿數值
+      if (range && weight >= 1 && weight <= 12) {
+        range.value = weight;
+      }
+
+      const minWater = Math.round(weight * 40);
+      const maxWater = Math.round(weight * 60);
+      const minBowls = (minWater / 200).toFixed(1);
+      const maxBowls = (maxWater / 200).toFixed(1);
+
+      resultText.textContent = `${minWater} ～ ${maxWater} ml`;
+      if (subNote) {
+        subNote.textContent = `大約等於 ${minBowls} ～ ${maxBowls} 碗標準貓水碗（以 200 ml / 碗計算）`;
+      }
+    }
+
+    function syncWeightFromRange() {
+      const range = document.getElementById('catWeightRange');
+      const input = document.getElementById('catWeightInput');
+      if (range && input) {
+        input.value = range.value;
+        updateWaterCalc();
+      }
+    }
+
+    function adjustWeight(delta) {
+      const input = document.getElementById('catWeightInput');
+      if (!input) return;
+      let current = parseFloat(input.value) || 4;
+      let next = Math.max(0.5, Math.min(15, +(current + delta).toFixed(1)));
+      input.value = next;
+      updateWaterCalc();
+    }
+
+    /**
+     * 第 8 頁：新手實作互動檢核表更新邏輯
+     */
+    function updateChecklist() {
+      const items = document.querySelectorAll('.checklist-item');
+      const total = items.length;
+      let checked = 0;
+
+      items.forEach((item) => {
+        const label = item.closest('label');
+        if (item.checked) {
+          checked++;
+          if (label) {
+            label.classList.add('bg-sageLight/60', 'border-sage/40');
+            label.classList.remove('bg-cream', 'border-borderWarm');
+          }
+        } else {
+          if (label) {
+            label.classList.remove('bg-sageLight/60', 'border-sage/40');
+            label.classList.add('bg-cream', 'border-borderWarm');
+          }
+        }
+      });
+
+      const percent = Math.round((checked / total) * 100);
+      const percentEl = document.getElementById('checkPercent');
+      const barEl = document.getElementById('checkProgressBar');
+      const feedbackEl = document.getElementById('checkFeedback');
+
+      if (percentEl) percentEl.textContent = `${percent}%`;
+      if (barEl) barEl.style.width = `${percent}%`;
+
+      if (feedbackEl) {
+        if (checked === 0) {
+          feedbackEl.textContent = '🐾 一步步檢查，為毛孩打造安心又健康的生活環境吧！';
+        } else if (checked < total) {
+          feedbackEl.textContent = `✨ 太棒了！已完成 ${checked} / ${total} 項，繼續完成剩下的照護檢查吧！`;
+        } else {
+          feedbackEl.textContent = '🎉 恭喜 100% 達標！你已經掌握新手養貓最核心的 5 大照護守則了！';
+        }
+      }
+    }
+
+    /**
+     * 鍵盤導覽事件（ArrowLeft / ArrowRight / Space / Escape）
+     */
+    document.addEventListener('keydown', (e) => {
+      // 若正在輸入數字或文字框，不攔截空白鍵與方向鍵
+      const tag = document.activeElement?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA') {
+        if (e.key === 'Escape') document.activeElement.blur();
+        return;
+      }
+
+      const modal = document.getElementById('tocModal');
+      const isModalOpen = modal && !modal.classList.contains('hidden');
+
+      if (e.key === 'Escape' && isModalOpen) {
+        toggleTocModal(false);
+        return;
+      }
+      if (isModalOpen) return;
+
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prevSlide();
+      }
+    });
+
+    /**
+     * 行動裝置左右滑動切換投影片
+     */
+    const stage = document.getElementById('slideStage');
+    if (stage) {
+      stage.addEventListener(
+        'touchstart',
+        (e) => {
+          touchStartX = e.changedTouches[0].screenX;
+        },
+        { passive: true }
+      );
+
+      stage.addEventListener(
+        'touchend',
+        (e) => {
+          touchEndX = e.changedTouches[0].screenX;
+          const diff = touchStartX - touchEndX;
+          // 滑動距離超過 50px 才觸發翻頁
+          if (Math.abs(diff) > 50) {
+            if (diff > 0) {
+              nextSlide();
+            } else {
+              prevSlide();
+            }
+          }
+        },
+        { passive: true }
+      );
+    }
+
+    // 頁面初始化
+    window.addEventListener('DOMContentLoaded', () => {
+      renderSlide(0);
+      updateWaterCalc();
+    });
+  </script>
+</body>
+</html>
